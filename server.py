@@ -26,9 +26,9 @@ def get_index_file():
 
 @get('/testData.json')
 def get_data():
-    client = MongoClient('172.22.117.118')
+    client = MongoClient('<ip address of mongo server>')
     optimus = Transformer(client)
-    return optimus.get_circle_packing_tree('//package/PackageTools')
+    return optimus.get_circle_packing_tree('//full/perforce/path/here')
 
 @post('/runDomainExpert')
 def run_perforce_domain_tool():
