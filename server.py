@@ -1,9 +1,8 @@
-from bottle import run, get, post, hook, request, response, route, static_file
 import os
 import tempfile
 from pymongo import MongoClient
-# from src.RippleEffect import RippleEffect, version
 from src.Transformer import Transformer
+from bottle import run, get, post, hook, request, response, route, static_file
 
 
 @hook('after_request')
@@ -33,11 +32,6 @@ def get_data():
 
 @post('/runDomainExpert')
 def run_perforce_domain_tool():
-    try:
-        pass
-    except:
-        pass
-    
     response.content_type = 'application/json'
     return {"results": "", "error": ""}
 

@@ -1,10 +1,10 @@
+import re
 import os
 import posixpath as path
-from pymongo import MongoClient
-from bson.regex import Regex
-from pymongo.errors import InvalidStringData
-import re
 from pprint import pprint
+from bson.regex import Regex
+from pymongo import MongoClient
+from pymongo.errors import InvalidStringData
 
 
 def deep_set(tree, paths, value):
@@ -19,6 +19,7 @@ def deep_set(tree, paths, value):
     if len(paths) == 0:
         current['children'][segment].update(value)
         return
+
     deep_set(current['children'][segment], paths, value)
 
 
@@ -51,8 +52,3 @@ class Transformer:
             deep_set(tree, paths, item)
         for_display(tree)
         return tree
-
-
-# client = MongoClient('172.22.117.118')
-# optimus = Transformer(client)
-# pprint(optimus.get_circle_packing_tree('//package/PackageTools'))

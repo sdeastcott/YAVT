@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-html,
-body{
+<style> html,
+
+body {
     height: 100%;
 }
+
 .node {
   cursor: pointer;
   stroke:#000;
@@ -16,38 +17,32 @@ body{
   stroke-width: 1.5px;
 }
 
-.node--leaf {
-}
-
 .label {
   font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-anchor: middle;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
-.label,
-.node--root,
-.node--leaf {
+.label, .node--root, .node--leaf {
   pointer-events: none;
 }
 
-.packing-wrapper{
+.packing-wrapper {
     display: inline-block;
 }
 
-.legend-div{
+.legend-div {
     display: inline-block;
     vertical-align: top;
 }
 
-
-
 </style>
 <body>
 <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
 <script>
-//Returns a random integer between min (included) and max (excluded)
-//Using Math.round() will give you a non-uniform distribution!
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -56,7 +51,7 @@ function ColorLuminance(hex, lum) {
   // validate hex string
   hex = String(hex).replace(/[^0-9a-f]/gi, '');
   if (hex.length < 6) {
-    hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
   lum = lum || 0;
 
@@ -71,9 +66,7 @@ function ColorLuminance(hex, lum) {
   return rgb;
 }
 
-var margin = 20,
-    diameter = 960;
-
+var margin = 20, diameter = 960;
 var color = d3.scale.category20();
 
 var pack = d3.layout.pack()
@@ -85,7 +78,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", diameter)
     .attr("height", diameter)
     .attr("class", "packing-wrapper")
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
    
 var legend = d3.select("body").append("div")
@@ -94,7 +87,6 @@ var legend = d3.select("body").append("div")
 
 var legendList = d3.select("div").append("ul");
     
-
 d3.json("http://172.22.117.118:8090/testData.json", function(error, root) {
   if (error) throw error;
 
@@ -105,14 +97,14 @@ d3.json("http://172.22.117.118:8090/testData.json", function(error, root) {
 
   var circle = svg.selectAll("circle")
       .data(nodes)
-    .enter().append("circle")
+      .enter().append("circle")
       .attr("class", function(d) { 
           return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; 
         })
       .style("fill", function(d) { 
-    	  if(d.contributors){
+    	  if(d.contributors) {
     		  var top = d.contributors[0];
-              if(!users[top.user]){
+              if(!users[top.user]) {
                   var newColor = color(getRandomInt(0, 20));
                   newColor = ColorLuminance(newColor, .00000005);
                   users[top.user] = newColor;
@@ -122,29 +114,27 @@ d3.json("http://172.22.117.118:8090/testData.json", function(error, root) {
               }
     		  return users[top.user];
     	  } else {
-    		  return 'white';
+                return 'white';
     	  }
     	})
-        .on("click", function(d){
+        .on("click", function(d) {
             zoom(d);
             d3.event.stopPropagation();
         });
-    //   .on("click", function(d) { if (focus !== d) zoom(d), d3.event.stopPropagation(); });
 
   var text = svg.selectAll("text")
       .data(nodes)
-    .enter().append("text")
+      .enter().append("text")
       .attr("class", "label")
       .style("fill-opacity", function(d) { return d.parent === root ? 1 : 0; })
       .style("display", function(d) { return d.parent === root ? "inline" : "none"; })
       .text(function(d) { 
           return d.name; 
-        });
+       });
 
   var node = svg.selectAll("circle,text");
 
   d3.select("body")
-    //   .style("background", color(-1))
       .on("click", function() { zoom(root); });
 
   zoomTo([root.x, root.y, root.r * 2 + margin]);

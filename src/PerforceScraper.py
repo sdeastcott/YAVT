@@ -1,26 +1,22 @@
-from __future__ import division, print_function
 import P4
-from pprint import pprint
-import datetime
 import os.path
-from collections import defaultdict
+import datetime
+from pprint import pprint
 from pymongo import MongoClient
+from collections import defaultdict
 from pymongo.operations import ReplaceOne
+from __future__ import division, print_function
 
 
 class PerforceScraper(object):
     def __init__(self, p4, client):
         self.p4 = p4
         self.client = client
+
     def run(self, path):
         return self._parse_perforce_path(path)
     
     def save_into_db(self, files):
-        for file in files:
-            pprint(file)
-#         replacements = [ReplaceOne({
-#             _id:
-#         })]
         self.client.Hackathon.files.insert_many(files)
     
     def _parse_perforce_path(self, path):
@@ -132,6 +128,6 @@ def main():
     for item in contrib:
         print('\t', item['user'])
 
+
 if __name__ == "__main__":
     main()
-    
