@@ -6,10 +6,19 @@ from bson.regex import Regex
 from pymongo import MongoClient
 from pymongo.errors import InvalidStringData
 
+def deep_set(tree, file_path, value):
+    '''
+        Recurses through dictionary tree, and sets the item indicated by
+        file_path to value.
 
-def deep_set(tree, paths, value):
+        Args:
+            tree (dict): A nested dictionary to set the value in
+            file_path : An array of indices into the tested dictionary.
+                For example ['level1', 'level2'] to set tree['level1']['level2']
+            value: Value to set the path to.
+    '''
     current = tree
-    segment = paths.pop(0)
+    segment = file_path.pop(0)
     current['children'].setdefault(segment, {
             'file_count': 0,
             'name': segment,
@@ -20,10 +29,13 @@ def deep_set(tree, paths, value):
         current['children'][segment].update(value)
         return
 
-    deep_set(current['children'][segment], paths, value)
+    deep_set(current['children'][segment], file_path, value)
 
 
 def for_display(tree):
+    '''
+        Recurses through the tree and formats it for display.
+    '''
     for k, v in tree['children'].items():
         for_display(v)
     tree['children'] = [v for k, v in tree["children"].items()]
