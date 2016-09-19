@@ -9,6 +9,6 @@ if __name__ == '__main__':
         exit()
 
     path = argv[1]
-    client = MongoClient('172.22.117.118')
+    client = MongoClient('<ip of mongo server>')
     optimus = Transformer(client)
-    tree = optimus.get_circle_packing_tree('//package/PackageTools/PackageInstaller/main')
+    tree = optimus.get_circle_packing_tree('//full/perforce/path/here')
